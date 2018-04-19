@@ -15,6 +15,6 @@
 		"npm": "^5.8.0"
 	},
 	"scripts": {
-		"start": "node app.mjs"
+		"start": "node --experimental-modules app.mjs"
 	}
 }
