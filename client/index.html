@@ -325,7 +325,7 @@
 			<a class="btn x-large circle theme-action right" onclick="document.getElementById('modal-create-order').style.display='block'" style="position:absolute;top:-28px;right:16px;">+</a>
 		</div>
 
-		<div id="orders_panel" class="panel">
+		<div id="orders_panel" class="panel center">
 			<div class="row text-theme">
 				<div class="col s3 container">
 					<h3>Number</h3>
@@ -351,7 +351,7 @@
 					<p></p>
 				</div>
 				<div>
-					<a class="edit-btn btn x-large round-large theme-l1 right">Edit</a>
+					<a class="edit-btn btn x-large round-large theme-l1">Edit</a>
 				</div>
 			</div>
 		</div>
@@ -429,12 +429,13 @@
 			</div>
 		</div>
 	</div>
+	
 	<div id="orders-stats">
-	<header class="container card theme">
+		<header class="container card theme">
 			<h1>Statistics</h1>
 		</header>
-			<div  class="panel">
-			<div class="row text-theme center">
+		<div id="stats-panel" class="panel center">
+			<div class="row text-theme">
 				<div class="col s3 container">
 					<h3 class ="stats-header">Date <i class="arrow down"></i></h3>
 				</div>
@@ -451,7 +452,7 @@
 
 			<hr>
 
-			<div class="row">
+			<div id ="stats-row" class="row">
 				<div class="col s3 container">
 					<p></p>
 				</div>
@@ -469,12 +470,13 @@
 	</div>
 	
 <script type="module">
-	import { loadOrders, createOrder, editOrder } from './handlers.js';
+	import { loadOrders, createOrder, editOrder, loadStats } from './handlers.js';
 	import ToggleArrows from './arrows.js';
+
 	document.getElementById('create-save').onclick = createOrder;
 	document.getElementById('edit-save').onclick = editOrder;
 	loadOrders();
-	
+	loadStats();
 	const arrows = new ToggleArrows();
 	arrows.addHandlers();
 </script>

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { Order } from './models.mjs';
-import { isValidByStatus } from './validators.mjs'
+import { isValidByStatus } from './validators.mjs';
 
 /**
  * Orders data fetching controller
@@ -19,6 +19,45 @@ export class OrdersList {
 				 this._response.json(orders);
 			}
 		});
+	}
+}
+
+export class StatsList {
+	constructor(response){
+		this._response = response;
+	}
+
+	fetch() {
+		Order.aggregate(
+			[
+				{
+					$group:
+						{
+							_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+							confirmed: { $sum:
+							{ $cond: { if: { $eq: [ "$status", "1" ] }, then: 1, else: 0 } } },
+									canceled: { $sum:
+							{ $cond: { if: { $eq: [ "$status", "2" ] }, then: 1, else: 0 } } },
+									deferred: { $sum:
+							{ $cond: { if: { $eq: [ "$status", "3" ] }, then: 1, else: 0 } } },
+									count: { $sum: 1 }
+						}
+				}
+			],
+			(error, stats) => {
+				if (error) {
+					this._response.status(400).send(error);
+				} else {
+					Order.count({}, (error, total) => {
+						if (error) {
+							this._response.status(400).send(error);
+						} else {
+							this._response.json({ total, stats });
+						}
+					});
+				}
+			}
+		);
 	}
 }
 

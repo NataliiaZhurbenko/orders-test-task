@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import Connection from './connection.mjs';
-import { OrdersList, NewOrder, ExistOrder, UpdateOrder } from './controllers.mjs';
+import { OrdersList, NewOrder, ExistOrder, UpdateOrder, StatsList } from './controllers.mjs';
 import bodyParser from 'body-parser';
 
 let jsonParser = bodyParser.json();
@@ -28,6 +28,11 @@ router.put('/orders/:orderId', jsonParser, (request, response) => {
 router.get('/orders', (request, response) => {
 	let ordersList = new OrdersList(response);
 	ordersList.fetch();
+});
+
+router.get('/stats', (request, response) => {
+	let statsList = new StatsList(response);
+	statsList.fetch();
 });
 
 router.post('/orders', jsonParser, (request, response)  => {

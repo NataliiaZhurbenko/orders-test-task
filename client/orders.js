@@ -71,6 +71,57 @@ export class OrdersLoader {
 	}
 }
 
+export class StatsLoader {
+	constructor() {
+		this._xhr = new XMLHttpRequest();
+		this._xhr.onreadystatechange = () => this._ready();
+	}
+
+	load() {
+		this._xhr.open('GET', '/api/stats', true);
+		this._xhr.send();
+	}
+
+	_ready() {
+		if (this._xhr.readyState == 4 && this._xhr.status == 200) {
+			const data = JSON.parse(this._xhr.responseText);
+			this._render(data);
+		}
+	}
+	
+	_render (data) {
+		// delete previous added stats order rows
+		let stats_panel = document.getElementById('stats-panel');
+		let stats_added_list = document.querySelectorAll('.stats-added-item');
+		//let hr_list = document.querySelectorAll('.hr');
+		for (let i=0; i<stats_added_list.length; i++) {
+			stats_panel.removeChild(stats_added_list[i]);
+			//orders_stats.removeChild(hr_list[i]);
+		}
+		
+		//create new stats order row
+		let stats_row = document.getElementById('stats-row');
+		for (let i=0; i<data.stats.length; i++) {
+			//clone element and add fields
+			let new_stats_row = stats_row.cloneNode(true);
+			new_stats_row.classList.add('stats-added-item');
+			let new_stats_list = new_stats_row.querySelectorAll('p');
+			new_stats_list[0].innerHTML = data.stats[i]._id;
+			const per = Math.round(data.stats[i].confirmed*100/data.total);
+			new_stats_list[1].innerHTML = `${data.stats[i].confirmed} (${per}%)`;
+			new_stats_list[2].innerHTML = data.stats[i].canceled;
+			new_stats_list[3].innerHTML = data.stats[i].deferred;
+
+			//create  hr element for separating created rows
+			let hr = document.createElement('hr');
+			hr.classList.add('stats-added-item');
+			//add new elements into panel
+			stats_panel.appendChild(new_stats_row);
+			stats_panel.appendChild(hr);
+		}
+	}
+}
+
 export class OrderCreator {
 	constructor(data, doneClb, errorClb) {
 		this._data = data;

@@ -1,4 +1,4 @@
-import { OrdersLoader, OrderCreator, OrderReader, OrderUpdater } from './orders.js';
+import { OrdersLoader, OrderCreator, OrderReader, OrderUpdater, StatsLoader } from './orders.js';
 
 export function createOrder() {
 	const name = document.getElementById('name').value;
@@ -15,6 +15,7 @@ export function createOrder() {
 		() => {
 			document.getElementById('modal-create-order').style.display='none';
 			loadOrders();
+			loadStats();
 		},
 		// Error callback
 		(error) => {
@@ -26,6 +27,11 @@ export function createOrder() {
 
 export function loadOrders() {
 	let loader = new OrdersLoader();
+	loader.load();
+}
+
+export function loadStats() {
+	let loader = new StatsLoader();
 	loader.load();
 }
 
@@ -46,6 +52,7 @@ export function editOrder() {
 		() => {
 			document.getElementById('modal-edit-order').style.display='none';
 			loadOrders();
+			loadStats();
 		},
 		// Error callback
 		(error) => {
