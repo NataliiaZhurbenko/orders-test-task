@@ -31,7 +31,9 @@ router.get('/orders', (request, response) => {
 });
 
 router.get('/stats', (request, response) => {
-	let statsList = new StatsList(response);
+	const sortBy = request.query.sortBy;
+	const sortDir = request.query.sortDir;
+	let statsList = new StatsList(response, sortBy, sortDir);
 	statsList.fetch();
 });
 

@@ -1,4 +1,4 @@
-
+import { loadStats } from './handlers.js';
 export default class ToggleArrows {
 	constructor () {
 		this._arrows = document.querySelectorAll(".arrow");
@@ -37,12 +37,19 @@ export default class ToggleArrows {
 	}
 
 	_toggleActiveArrow(active_arrow) {
+		const sortBy = active_arrow.parentElement.id;
+		let sortDir;
+		
 		if (active_arrow.classList.contains('up')) { 
 			active_arrow.classList.remove('up');
 			active_arrow.classList.add('down');
+			sortDir = -1;
 		} else {
 			active_arrow.classList.remove('down')
 			active_arrow.classList.add('up');
+			sortDir = 1;
 		}
+		
+		loadStats(sortBy, sortDir);
 	}
 }

@@ -23,8 +23,14 @@ export class OrdersList {
 }
 
 export class StatsList {
-	constructor(response){
+	constructor(response, sortBy, sortDir) {
 		this._response = response;
+		const availableSortFields = ['_id', 'confirmed', 'canceled', 'deferred'];
+		const availableSortDirs = [-1, 1];
+
+		sortDir = parseInt(sortDir) || 0;
+		this._sortBy = (availableSortFields.includes(sortBy) ? sortBy : null);
+		this._sortDir = (availableSortDirs.includes(sortDir) ? sortDir : null);
 	}
 
 	fetch() {
@@ -40,7 +46,11 @@ export class StatsList {
 			}
 		];
 
-		 Order.aggregate(query, (error, stats) => {
+		if (this._sortBy && this._sortDir) {
+			query.push({ $sort: { [this._sortBy]: this._sortDir } });
+		}
+		
+		Order.aggregate(query, (error, stats) => {
 			if (error) {
 				this._response.status(400).send(error);
 			} else {
@@ -48,7 +58,7 @@ export class StatsList {
 					if (error) {
 						 this._response.status(400).send(error);
 					} else {
-						 this._response.json({ total, stats });
+						this._response.json({ total, stats });
 					}
 				});
 			}

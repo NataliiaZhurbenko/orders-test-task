@@ -72,13 +72,20 @@ export class OrdersLoader {
 }
 
 export class StatsLoader {
-	constructor() {
+	constructor(sortBy, sortDir) {
 		this._xhr = new XMLHttpRequest();
 		this._xhr.onreadystatechange = () => this._ready();
+		this._sortBy = sortBy;
+		this._sortDir = sortDir;
 	}
 
 	load() {
-		this._xhr.open('GET', '/api/stats', true);
+		let path = `/api/stats`;
+		if (this._sortBy && this._sortDir) {
+			path += `?sortBy=${this._sortBy}&sortDir=${this._sortDir}`;
+		}
+
+		this._xhr.open('GET', path, true);
 		this._xhr.send();
 	}
 

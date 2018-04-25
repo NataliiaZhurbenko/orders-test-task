@@ -30,11 +30,10 @@ export function loadOrders() {
 	loader.load();
 }
 
-export function loadStats() {
-	let loader = new StatsLoader();
+export function loadStats(sortBy = null, sortDir = null) {
+	let loader = new StatsLoader(sortBy, sortDir);
 	loader.load();
 }
-
 export function editOrder() {
 	const orderId = document.getElementById('order-id').value;
 	const name = document.getElementById('edit-name').value;
