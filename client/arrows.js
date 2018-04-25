@@ -22,9 +22,9 @@ export default class ToggleArrows {
 			for(let i=0; i<this._headers.length; i++) {
 				this._arrows[i].style.display = 'none';
 			}
-
 			active_arrow.style.display = 'inline-block';
 		}
+		this._sortStats(active_arrow);
 	}
 
 	_toggleArrow (e) {
@@ -34,22 +34,28 @@ export default class ToggleArrows {
 		if (active_arrow.style.display == 'inline-block') {
 			this._toggleActiveArrow(active_arrow);
 		}
+		this._sortStats(active_arrow);
 	}
 
 	_toggleActiveArrow(active_arrow) {
-		const sortBy = active_arrow.parentElement.id;
-		let sortDir;
-		
 		if (active_arrow.classList.contains('up')) { 
 			active_arrow.classList.remove('up');
 			active_arrow.classList.add('down');
-			sortDir = -1;
 		} else {
 			active_arrow.classList.remove('down')
 			active_arrow.classList.add('up');
+		}
+	}
+	
+	_sortStats(active_arrow) {
+		const sortBy = active_arrow.parentElement.id;
+		let sortDir;
+
+		if (active_arrow.classList.contains('up')) { 
+			sortDir = -1;
+		} else {
 			sortDir = 1;
 		}
-		
-		loadStats(sortBy, sortDir);
-	}
+			loadStats(sortBy, sortDir);
+		}
 }
